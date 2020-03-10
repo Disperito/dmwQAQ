@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dmwqaq.web.mapper.ArticleMapper">
+
+    <resultMap id="ConstructorMap" type="cn.dmwqaq.web.pojo.po.Article">
+        <constructor>
+            <arg column="id" javaType="java.lang.Long"/>
+            <arg column="title" javaType="java.lang.String"/>
+            <arg column="author_name" javaType="java.lang.String"/>
+            <arg column="create_datetime" javaType="java.util.Date"/>
+            <arg column="update_datetime" javaType="java.util.Date"/>
+            <arg column="content" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.dmwqaq.web.pojo.po.Article" useGeneratedKeys="true" keyColumn="id"
+            keyProperty="id">
+        insert into article(id, title, author_name, create_datetime, update_datetime, content)
+        values (#{id}, #{title}, #{authorName}, now(), now(), #{content})
+    </insert>
+
+    <select id="findById" parameterType="java.lang.String" resultMap="ConstructorMap">
+        select id, title, author_name, create_datetime, update_datetime, content
+        from article
+        where id = #{id}
+    </select>
+    <!--<select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT *
+        FROM ums_user
+        WHERE id = #{id}
+    </select>
+
+    <select id="listUsers" resultMap="BaseResultMap">
+        SELECT *
+        FROM ums_user
+    </select>
+
+    <select id="countAll" resultType="java.lang.Integer">
+        select count(*)
+        from ums_user
+    </select>
+
+    <update id="update" parameterType="cn.dmwqaq.ums.pojo.User">
+        UPDATE ums_user
+        SET update_time = now(),
+        <if test="password != null">
+            password = #{password},
+        </if>
+        name = #{name},
+        department_id = #{departmentId},
+        authority_group_id = #{authorityGroupId},
+        work_phone_number = #{workPhoneNumber},
+        cell_phone_number = #{cellPhoneNumber},
+        status = #{status},
+        remark = #{remark}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE
+        FROM ums_user
+        WHERE id = #{id}
+    </delete>-->
+
+
+    <!--<insert id="insertSelective" parameterType="cn.dmwqaq.ums.pojo.User">
+    insert into ums_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            id,
+        </if>
+        <if test="name != null">
+            name,
+        </if>
+        <if test="departmentId != null">
+            department_id,
+        </if>
+        <if test="authorityGroupId != null">
+            authority_group_id,
+        </if>
+        <if test="workPhoneNumber != null">
+            work_phone_number,
+        </if>
+        <if test="cellPhoneNumber != null">
+            cell_phone_number,
+        </if>
+        <if test="status != null">
+            status,
+        </if>
+        <if test="remark != null">
+            remark,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            #{id,jdbcType=BIGINT},
+        </if>
+        <if test="name != null">
+            #{name,jdbcType=VARCHAR},
+        </if>
+        <if test="departmentId != null">
+            #{departmentId,jdbcType=BIGINT},
+        </if>
+        <if test="authorityGroupId != null">
+            #{authorityGroupId,jdbcType=BIGINT},
+        </if>
+        <if test="workPhoneNumber != null">
+            #{workPhoneNumber,jdbcType=BIGINT},
+        </if>
+        <if test="cellPhoneNumber != null">
+            #{cellPhoneNumber,jdbcType=BIGINT},
+        </if>
+        <if test="status != null">
+            #{status,jdbcType=TINYINT},
+        </if>
+        <if test="remark != null">
+            #{remark,jdbcType=VARCHAR},
+        </if>
+    </trim>
+</insert>-->
+
+</mapper>

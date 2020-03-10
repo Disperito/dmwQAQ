@@ -1,0 +1,30 @@
+
+#recent-article-list >ul>li>a {
+    color: #767676;
+    font-size:13px;
+}
+
+#recent-article-list {
+    border: 1px dashed #8c8c8c;
+    /*border-radius: 20px;*/
+    padding-left: 15px;
+    padding-right: 5px;
+    padding-bottom: 20px;
+}
+
+.article {
+    border: 1px dashed #5e5e5e;
+    padding: 15px 15px 15px 15px;
+}
+
+.article-title {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.article-date, .article_author{
+    color: #8c8c8c;
+    font-size: 12px;
+    display: inline-block;
+    margin-bottom: 10px;
+}
