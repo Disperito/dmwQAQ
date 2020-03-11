@@ -14,17 +14,14 @@
 
     <context:property-placeholder location="classpath:properties/jdbc.properties" ignore-unresolvable="true"/>
     <context:property-placeholder location="classpath:properties/druid.properties" ignore-unresolvable="true"/>
-    <aop:aspectj-autoproxy/>
-
-    <mvc:annotation-driven/>
     <context:component-scan base-package="cn.dmwqaq.web.controller"/>
     <context:component-scan base-package="cn.dmwqaq.web.service"/>
     <context:component-scan base-package="cn.dmwqaq.web.mapper"/>
 
-
+    <aop:aspectj-autoproxy/>
 
     <mvc:default-servlet-handler default-servlet-name="default"/>
-
+    <mvc:annotation-driven/>
 
     <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driveClassName}"/>
@@ -42,17 +39,17 @@
     <bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
-<!--        <property name="plugins">-->
-<!--            <array>-->
-<!--                <bean class="com.github.pagehelper.PageInterceptor">-->
-<!--                    <property name="properties">-->
-<!--                        <value>-->
-<!--                            reasonable=true-->
-<!--                        </value>-->
-<!--                    </property>-->
-<!--                </bean>-->
-<!--            </array>-->
-<!--        </property>-->
+        <!--        <property name="plugins">
+                    <array>
+                        <bean class="com.github.pagehelper.PageInterceptor">
+                            <property name="properties">
+                                <value>
+                                    reasonable=true
+                                </value>
+                            </property>
+                        </bean>
+                    </array>
+                </property>-->
     </bean>
 
     <bean name="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
@@ -64,5 +61,11 @@
         <property name="sqlSessionTemplateBeanName" value="sqlSession"/>
         <property name="basePackage" value="cn.dmwqaq.web.mapper"/>
     </bean>
+
+    <!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"-->
+    <!--          id="internalResourceViewResolver">-->
+    <!--        <property name="prefix" value="/WEB-INF/html/"/>-->
+    <!--        <property name="suffix" value=".html"/>-->
+    <!--    </bean>-->
 
 </beans>
