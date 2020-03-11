@@ -15,8 +15,8 @@
 
     <insert id="insert" parameterType="cn.dmwqaq.web.pojo.po.Article" useGeneratedKeys="true" keyColumn="id"
             keyProperty="id">
-        insert into article(id, title, author_name, create_datetime, update_datetime, content)
-        values (#{id}, #{title}, #{authorName}, now(), now(), #{content})
+        insert into article(title, author_name, create_datetime, update_datetime, content)
+        values (#{title}, #{authorName}, now(), now(), #{content})
     </insert>
 
     <select id="findById" parameterType="java.lang.String" resultMap="ConstructorMap">

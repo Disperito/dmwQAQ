@@ -28,6 +28,12 @@ public class Article {
         this.content = content;
     }
 
+    public Article(String title, String authorName, String content) {
+        this.title = title;
+        this.authorName = authorName;
+        this.content = content;
+    }
+
     public Article() {
 
     }
