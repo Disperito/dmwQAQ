@@ -1750,6 +1750,18 @@ axios.get('/article/get/'+getPathID())
                 article: response.data
             },
         });
+        app.article.createDatetime = new Date(app.article.createDatetime).toLocaleString();
+    });
+
+axios.get('/article/getRecentArticles')
+    .then(function (response) {
+        const articles = response.data;
+        new Vue({
+            el: "#recent-article-list",
+            data: {
+                articles: articles
+            }
+        });
     });
 
 function isLogined() {
@@ -1766,18 +1778,7 @@ new Vue({
     }
 });
 
-new Vue({
-    el: "#recent-article-list",
-    data: {
-        articles: [
-            {title: "震惊！一网站竟上传这种内容..!快来看！！", href: "#"}
-            , {title: "震惊！一网站竟上传这种内容..!快来看！！", href: "#"}
-            , {title: "震惊！一网站竟上传这种内容..!快来看！！", href: "#"}
-            , {title: "震惊！一网站竟上传这种内容..!快来看！！", href: "https://www.baidu.com"}
-            , {title: "震惊！一网站竟上传这种内容..!快来看！！", href: "#"}
-        ]
-    }
-});
+
 
 
 function getPathID() {
