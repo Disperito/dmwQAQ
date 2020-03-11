@@ -4,6 +4,8 @@ import cn.dmwqaq.web.pojo.po.Article;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface ArticleMapper {
@@ -12,4 +14,7 @@ public interface ArticleMapper {
 
     Article findById(String id) throws Exception;
 
+    List<Article> getRecentArticles() throws Exception;
+
+    List<Article> findAll() throws Exception;
 }

@@ -13,6 +13,14 @@
         </constructor>
     </resultMap>
 
+    <resultMap id="ConstructorMap2" type="cn.dmwqaq.web.pojo.po.Article">
+        <constructor>
+            <arg column="id" javaType="java.lang.Long"/>
+            <arg column="title" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+
     <insert id="insert" parameterType="cn.dmwqaq.web.pojo.po.Article" useGeneratedKeys="true" keyColumn="id"
             keyProperty="id">
         insert into article(title, author_name, create_datetime, update_datetime, content)
@@ -23,6 +31,18 @@
         select id, title, author_name, create_datetime, update_datetime, content
         from article
         where id = #{id}
+    </select>
+
+    <select id="findAll" parameterType="java.lang.String" resultMap="ConstructorMap">
+        select id, title, author_name, create_datetime, update_datetime, content
+        from article
+    </select>
+
+    <select id="getRecentArticles" resultMap="ConstructorMap2">
+        select id, title
+        from article
+        order by create_datetime desc
+        limit 5;
     </select>
     <!--<select id="getById" parameterType="java.lang.Long" resultMap="BaseResultMap">
         SELECT *

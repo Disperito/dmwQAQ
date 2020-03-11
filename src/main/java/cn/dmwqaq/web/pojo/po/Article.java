@@ -34,6 +34,11 @@ public class Article {
         this.content = content;
     }
 
+    public Article(Long id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
     public Article() {
 
     }
