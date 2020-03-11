@@ -10,9 +10,9 @@
     <listener>
         <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
     </listener>
-    <!--    <listener>-->
-    <!--        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
-    <!--    </listener>-->
+<!--    <listener>-->
+<!--        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+<!--    </listener>-->
 
     <filter>
         <filter-name>log4jServletFilter</filter-name>
@@ -37,9 +37,9 @@
     <!--        <param-value>classpath:applicationContext.xml</param-value>-->
     <!--    </context-param>-->
 
-      <welcome-file-list>
-        <welcome-file>index</welcome-file>
-      </welcome-file-list>
+    <welcome-file-list>
+        <welcome-file>/index.html</welcome-file>
+    </welcome-file-list>
 
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
