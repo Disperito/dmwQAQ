@@ -185,13 +185,6 @@
             <version>5.6.15</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.jboss.arquillian.junit/arquillian-junit-container -->
-        <dependency>
-            <groupId>org.jboss.arquillian.junit</groupId>
-            <artifactId>arquillian-junit-container</artifactId>
-            <version>1.6.0.Final</version>
-            <scope>test</scope>
-        </dependency>
 
     </dependencies>
 
