@@ -27,10 +27,7 @@
         }
     </style>
 
-
-    <script src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
-
-
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 </head>
 
 <body>
@@ -64,13 +61,21 @@
 </nav>
 
 <div class="container">
+    <div class="form-group">
+        <label>
+            <input type="text" class="form-control" id="title-input" placeholder="请输入文章标题..." style="width: 500px">
+        </label>
+    </div>
     <div class="row">
         <div id="editor"></div>
-        <div class="btn" onclick="printHTML()">获取html</div>
+    </div>
+    <div class="row" id="publish-btn">
+        <button class="btn btn-default" @click="publishArticle()">发布文章</button>
     </div>
 </div>
 
 
+<script src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
 <script type="text/javascript">
     var E = window.wangEditor;
     var editor = new E('#editor');
@@ -121,21 +126,34 @@
         // }
 
     };
-
-    // const axios = require('axios');
-    // axios.get('/upload', {
-    //
-    // })
-    //     .then(function (response) {
-    //         alert(response);
-    //     });
-
-
-    // 或者 var editor = new E( document.getElementById('editor') )
-    editor.create()
+    editor.customConfig.length = 700;
+    editor.create();
+    $('.w-e-text-container').css('height', '500px');
 </script>
 
 <script>
+    new Vue({
+        el: "#publish-btn",
+        methods: {
+            publishArticle: function () {
+                let title = document.getElementById("title-input").value;
+                let content = editor.txt.html();
+                $.ajax({
+                    url: '/article',
+                    type: 'POST',
+                    data: {
+                        title: title,
+                        content: content,
+                        authorName: "大魔王"
+                    },
+                    success: function (response_text) {
+                        alert("发布成功！" + response_text)
+                    }
+                });
+            }
+        },
+    });
+
     function isLogined() {
         // TODO
         return false;
