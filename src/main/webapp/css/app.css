@@ -1,7 +1,7 @@
 
-#recent-article-list >ul>li>a {
+#recent-article-list > ul > li > a {
     color: #767676;
-    font-size:13px;
+    font-size: 13px;
 }
 
 #recent-article-list {
@@ -22,9 +22,11 @@
     margin-bottom: 20px;
 }
 
-.article-date, .article_author{
+.article-date, .article_author {
     color: #8c8c8c;
     font-size: 12px;
     display: inline-block;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    margin-right: 10px;
 }
+
