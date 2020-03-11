@@ -1,0 +1,16 @@
+{
+  "name": "dmwqaq",
+  "description": "大魔王天下第一~",
+  "version": "1.0.0",
+  "author": "Disperito",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Disperito/dmwQAQ.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {}
+}
