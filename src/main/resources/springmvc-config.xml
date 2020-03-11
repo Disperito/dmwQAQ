@@ -25,8 +25,7 @@
 
     <bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driveClassName}"/>
-        <property name="url"
-                  value="${jdbc.url}"/>
+        <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
         <property name="maxWait" value="${druid.maxWait}"/>
@@ -39,17 +38,17 @@
     <bean name="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
-        <!--        <property name="plugins">
-                    <array>
-                        <bean class="com.github.pagehelper.PageInterceptor">
-                            <property name="properties">
-                                <value>
-                                    reasonable=true
-                                </value>
-                            </property>
-                        </bean>
-                    </array>
-                </property>-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            reasonable=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <bean name="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
