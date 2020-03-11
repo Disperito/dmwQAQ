@@ -21,8 +21,6 @@ public class CloudObjectStorageService {
 
     private static Logger logger = LogManager.getLogger(CloudObjectStorageService.class);
 
-    //    private final String secretId = "AKIDpQoxrTYvlN5aw4qOfngT1JMDpCJAxSwL";
-//    private final String secretKey = "hU9kCxj7MzVuESm0LbDjAVjrtkpqfDaA";
     private String secretId;
     private String secretKey;
     private final String bucketName = "dmwqaq-1300596096";

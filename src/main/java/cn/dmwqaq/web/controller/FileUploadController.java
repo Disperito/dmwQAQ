@@ -6,9 +6,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -20,19 +18,12 @@ import java.io.OutputStream;
 import java.util.List;
 
 @Controller
-@RequestMapping("/upload")
 public class FileUploadController {
 
     @Resource
     private CloudObjectStorageService cloudObjectStorageService;
 
-    @GetMapping("/get")
-    @ResponseBody
-    public String testGet() {
-        return "1";
-    }
-
-    @PostMapping("/post")
+    @PostMapping("/upload")
     @ResponseBody
     public String uploadFile(HttpServletRequest request) {
         DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
