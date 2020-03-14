@@ -19,7 +19,6 @@ public class ArticleController {
     @Resource
     ArticleService articleService;
 
-    //  @GetMapping(value="/{id:\\d+}",produces = "text/html; charset=utf-8")
     @GetMapping(value = "/{id:\\d+}")
     public ModelAndView dispatchToArticlePage(@PathVariable String id) {
         return new ModelAndView("/WEB-INF/article.html?id=" + id);
@@ -31,14 +30,15 @@ public class ArticleController {
         return JSON.toJSONString(articleService.findById(id));
     }
 
-    @GetMapping(value = "/get/{pageSize:\\d+}/{pageNum:\\d+}", produces = "application/json; charset=utf-8")
+    @GetMapping(value = "/findAll", produces = "application/json; charset=utf-8")
     @ResponseBody
-    public String getAllArticles(@PathVariable Integer pageSize, @PathVariable Integer pageNum) {
+    public String getAllArticles(@RequestParam(value = "ps", required = false, defaultValue = "5") Integer pageSize,
+                                 @RequestParam(value = "pn", required = false, defaultValue = "1") Integer pageNum) {
         PageHelper.startPage(pageNum, pageSize);
         return JSON.toJSONString(new PageInfo<>(articleService.findAll(), pageSize));
     }
 
-    @PostMapping("")
+    @PostMapping
     @ResponseBody
     public String publishArticle(HttpServletRequest request) {
         String title = request.getParameter("title");
@@ -48,7 +48,6 @@ public class ArticleController {
         return articleService.insert(article) ? String.valueOf(article.getId()) : String.valueOf(-1);
     }
 
-    //    @GetMapping(value = "/getRecentArticles", produces = "application/json; charset=utf-8")
     @GetMapping(value = "/getRecentArticles")
     @ResponseBody
     public String getRecentArticles() {
