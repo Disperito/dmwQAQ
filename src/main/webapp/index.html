@@ -7,6 +7,7 @@
     <style>
         body {
             padding-top: 100px;
+            /*background-color: rgba(250, 235, 215, 0.31);*/
         }
 
         footer > div > a, footer > p {
@@ -18,31 +19,48 @@
             left: 25px;
         }
 
+        .article-list {
+            border: 1px dashed black;
+            border-radius: 35px;
+        }
+
         .article-cover {
             padding: 20px 20px 20px 20px;
-            border: 1px dashed #1b6d85;
-            margin-bottom: 50px;
+            border-bottom: 1px dashed gray;
+            /*border: 1px dashed #1b6d85;*/
+            /*margin-bottom: 20px;*/
         }
 
         .article-cover > .article-title {
             color: black;
-            font-size: 30px;
-            margin-bottom: 10px;
+            font-size: 18px;
+            margin-bottom: 16px;
         }
 
-        .article-cover > .article-title :hover {
+        .article-cover > a:hover {
             text-decoration: none;
+            color: #ca0c16;
         }
 
         .article-cover > .article-abstract {
-            font-size: 16px;
+            font-size: 14px;
             margin-bottom: 10px;
             color: #9d9d9d;
+        }
+
+        .inoneline {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        [v-cloak] {
+            display: none;
         }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <script src="js/index_0.js"></script>
+    <script src="js/load_axios.js"></script>
 
 </head>
 <body>
@@ -63,29 +81,62 @@
     </div>
 </nav>
 
-<div class="container">
-    <div class="well">
-        <div class="list-group">
-            <div class="list-group-item">
-                <div class="list-group-item-heading">Java Web作业成果展示</div>
-                <a href="http://www.dmwqaq.cn/employee_demo">雇员管理系统</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="container">
-    <div class="article-list">
-        <div class="article-cover" v-for="article in articles">
-            <a class="article-title" :href="'article/'+article.id">{{article.title}}</a>
-            <!--            .substring(0,50)-->
-            <div class="article-abstract" v-html="(article.content)"></div>
-            <div class="article-author">
-                作者：{{article.authorName}}&nbsp;&nbsp;&nbsp;&nbsp;
-                发布时间：{{new Date(article.createDatetime).toLocaleString()}}
+    <div class="row">
+        <div class="article-list col-lg-8 col-md-8 col-sm-12 col-xs-12" v-cloak>
+            <div class="article-cover" v-for="article in articles">
+                <a class="article-title" :href="'article/'+article.id">{{article.title}}</a>
+                <div class="article-abstract inoneline" v-html="trimHTML(article.content)"></div>
+                <div class="article-author">
+                    作者：{{article.authorName}}&nbsp;&nbsp;&nbsp;&nbsp;
+                    发布时间：{{new Date(article.createDatetime).toLocaleString()}}
+                </div>
             </div>
         </div>
+        <div class="col-lg-4 col-md-4 hidden-sm hidden-xs">
+            <div class="list-group">
+                <div class="list-group-item">
+                    <div class="list-group-item-heading page-header">Java Web作业成果展示</div>
+                    <div class="list-group-item"><a href="http://ums.dmwqaq.cn">用户管理系统</a></div>
+                    <div class="list-group-item"><a href="http://dmwqaq.cn/employee_demo">雇员管理系统</a></div>
+                </div>
+            </div>
+
+            <div class="well">说明：用户管理系统应该是没问题的，雇员管理系统属于早期作业，好像出了很多问题改天再改改！~</div>
+        </div>
     </div>
+
+    <nav aria-label="Page navigation" id="pager" class="pagination-centered">
+        <ul class="pagination">
+            <li>
+                <a aria-label="Previous" @click="turnToPreviousPage()">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li v-if="totalPages <= 10" v-for="i in totalPages" :class="isPageActive(i)">
+                <span v-if="i === pageNum">{{i}}</span>
+                <a v-if="i !== pageNum" @click="turnToPage(i)">{{i}}</a>
+            </li>
+            <li v-if="totalPages > 10" v-for="i in vicinity" :class="isPageActive(i)">
+                <span v-if="i === pageNum">{{i}}</span>
+                <a v-if="i !== pageNum" @click="turnToPage(i)">{{i}}</a>
+            </li>
+            <li>
+                <a aria-label="Next" @click="turnToNextPage()">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+        <form class="form-group">
+            <label class="form-inline">
+                跳转到：
+                <input class="form-control" type="text" style="width:50px">
+            </label>
+            <button class="btn btn-default btn-sm">Go!</button>
+        </form>
+        <p v-text="'共有'+recordCount+'篇文章，'+totalPages+'页'"></p>
+    </nav>
 </div>
 
 
@@ -100,5 +151,146 @@
     </p>
 </footer>
 
+
+<script>
+    const DEFAULT_PAGE_SIZE = 5;
+
+    /**
+     * 从地址栏的url中获取指定参数的指
+     * @param variable 所要获取的参数名
+     * @returns {string|null} 匹配到时返回其值，否则null
+     */
+    function getQueryVariable(variable) {
+        let query = window.location.search.substring(1);
+        let vars = query.split("&");
+        for (let i = 0; i < vars.length; i++) {
+            const pair = vars[i].split("=");
+            if (pair[0] === variable) {
+                return pair[1];
+            }
+        }
+        return null;
+    }
+
+    let for_pager = new Vue({
+        el: "#pager",
+        data: {
+            // 每一页显示的记录数,默认为5
+            pageSize: DEFAULT_PAGE_SIZE,
+
+            // 记录分页信息的实体
+            pageInfo: null
+        },
+        computed: {
+            // 总页数
+            totalPages: function () {
+                let tmp = null;
+                if (this.pageInfo && (tmp = this.pageInfo['pages'])) {
+                    return tmp;
+                } else {
+                    return 0;
+                }
+            },
+
+            // 当前页面的页码
+            pageNum: function () {
+                let tmp;
+                if (this.pageInfo && (tmp = this.pageInfo.pageNum)) {
+                    return tmp;
+                } else if ((tmp = getQueryVariable('pn'))) {
+                    return tmp;
+                } else {
+                    return 1;
+                }
+            },
+
+            // 记录的总条数
+            recordCount: function () {
+                let a;
+                return (a = this.pageInfo) ? a.total : 0;
+            },
+
+            // 当页数大于10页时，只显示当前页数附近10页的范围;
+            vicinity: function () {
+                let pn = this.pageNum;
+                let totalPages = this.totalPages;
+                if (totalPages === 0) {
+                    return new Array(0);
+                } else if (pn < 5) {
+                    return this.getIntArray(1, 10);
+                } else if (pn + 5 >= this.totalPages) {
+                    return this.getIntArray(totalPages - 9, totalPages);
+                } else {
+                    let arr = this.getIntArray(pn - 4, pn + 5);
+                    console.log(arr);
+                    return arr;
+                }
+            }
+        }, methods: {
+            isPageActive: function (index) {
+                // 如果该标签的页数和url中的页数是一致的，或者url中没有页数参数（说明是首页）
+                if (parseInt(index) === parseInt(getQueryVariable("pn"))
+                    || !getQueryVariable("pn") && parseInt(index) === 1) {
+                    return 'active';
+                }
+            },
+            turnToPreviousPage: function () {
+                this.turnToPage(this.pageInfo['prePage'], this.pageSize);
+            },
+            turnToNextPage: function () {
+                this.turnToPage(this.pageInfo['nextPage'], this.pageSize);
+            },
+            turnToPage: function (pageNum, pageSize) {
+                if (isNaN(pageNum)) {
+                    return;
+                }
+                // 如果用户没有指定页面大小，或者没有传入该参数
+                if (pageSize === DEFAULT_PAGE_SIZE || !pageSize) {
+                    window.location = '/index.html?pn=' + pageNum;
+                } else {
+                    window.location = '/index.html?pn=' + pageNum + '&ps=' + pageSize;
+                }
+            },
+            getIntArray(start, end) {
+                if (start > end) {
+                    return new Array(0);
+                }
+                let arr = [];
+                for (let i = start; i <= end; i++) {
+                    arr.push(i);
+                }
+                return arr;
+            }
+        }
+    });
+
+    // 根据当前页数和页面大小，向服务器拉取文章信息
+    axios.get('/article/findAll/', {
+        // 在url后拼接参数
+        params: {
+            ps: for_pager.pageSize,
+            pn: for_pager.pageNum
+        }
+    }).then(function (response) {
+        const pageInfo = response.data;
+        for_pager.pageInfo = pageInfo;
+        const articles = pageInfo.list;
+        new Vue({
+            el: ".article-list",
+            data: {
+                articles: articles
+            },
+            methods: {
+                trimHTML: function (str) {
+                    return str.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi, '')
+                        .replace(/<[^>]+?>/g, '')
+                        .replace(/\s+/g, ' ')
+                        .replace(/ /g, ' ')
+                        .replace(/>/g, ' ');
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
