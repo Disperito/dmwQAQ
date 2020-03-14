@@ -147,7 +147,8 @@
                         authorName: "大魔王"
                     },
                     success: function (response_text) {
-                        alert("发布成功！" + response_text)
+                        alert('发布成功！');
+                        window.location = '/article/' + response_text;
                     }
                 });
             }
