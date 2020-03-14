@@ -36,6 +36,7 @@
     <select id="findAll" parameterType="java.lang.String" resultMap="ConstructorMap">
         select id, title, author_name, create_datetime, update_datetime, content
         from article
+        order by create_datetime desc
     </select>
 
     <select id="getRecentArticles" resultMap="ConstructorMap2">
