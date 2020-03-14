@@ -5,9 +5,10 @@
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
 
-        <!--<File name="RootFile" fileName="${sys:catalina.home}/logs/log.log">
+
+        <File name="RootFile" fileName="/home/logs/dmwqaq.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>-->
+        </File>
 
         <!--        <File name="mybatisAppender" fileName="${web:rootDir}/logs/mybatis.log">-->
         <!--            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
@@ -17,21 +18,26 @@
     <Loggers>
         <Root level="all">
             <AppenderRef ref="Console" level="ERROR"/>
-<!--            <AppenderRef ref="RootFile" level="ERROR"/>-->
+            <AppenderRef ref="RootFile" level="ERROR"/>
         </Root>
 
-<!--        <logger name="cn.dmwqaq.ums.mapper" level="ERROR">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--            &lt;!&ndash;            <AppenderRef ref="webRootFile"/>&ndash;&gt;-->
-<!--        </logger>-->
+        <logger name="cn.dmwqaq.web.mapper" level="ERROR">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RootFile" level="ERROR"/>
+        </logger>
 
-<!--        <logger name="cn.dmwqaq.ums.controller" level="DEBUG">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--        </logger>-->
+        <logger name="cn.dmwqaq.web.service" level="ERROR">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RootFile" level="ERROR"/>
+        </logger>
 
-<!--        <logger name="cn.dmwqaq.ums.aspect" level="DEBUG">-->
-<!--            <AppenderRef ref="Console"/>-->
-<!--        </logger>-->
+        <!--        <logger name="cn.dmwqaq.ums.controller" level="DEBUG">-->
+        <!--            <AppenderRef ref="Console"/>-->
+        <!--        </logger>-->
+
+        <!--        <logger name="cn.dmwqaq.ums.aspect" level="DEBUG">-->
+        <!--            <AppenderRef ref="Console"/>-->
+        <!--        </logger>-->
 
     </Loggers>
 </Configuration>
