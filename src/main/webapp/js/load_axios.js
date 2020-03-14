@@ -1,3 +1,4 @@
+let axios;
 (function () {
     function r(e, n, t) {
         function o(i, f) {
@@ -1833,42 +1834,8 @@
     }, {"./helpers/bind": 18}],
     28: [function (require, module, exports) {
 
+        axios = require('axios');
 
-        const axios = require('axios');
 
-        let tmp;
-        let pageSize = 5;
-        let pageNum = 1;
-        if ((tmp = getQueryVariable('ps')) != null) {
-            pageSize = tmp;
-        }
-        if ((tmp = getQueryVariable('pn')) != null) {
-            pageNum = tmp;
-        }
-
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split("&");
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split("=");
-                if (pair[0] == variable) {
-                    return pair[1];
-                }
-            }
-            return null;
-        }
-
-        axios.get('/article/get/' + pageSize + '/' + pageNum)
-            .then(function (response) {
-                const pageInfo = response.data;
-                const articles = pageInfo.list;
-                console.log(articles);
-                new Vue({
-                    el: ".article-list",
-                    data: {
-                        articles: articles
-                    }
-                })
-            });
     }, {"axios": 2}]
 }, {}, [28]);
