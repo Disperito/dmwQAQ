@@ -4,4 +4,4 @@
 *.class
 *.properties
 /.settings/
-
+/node_modules/
