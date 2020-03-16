@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>大魔王的小窝QAQ</title>
+    <link rel="stylesheet" href="css/app.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            padding-top: 100px;
+        }
+
+        footer > div > a, footer > p {
+            font-size: 10px;
+        }
+
+        footer > div {
+            position: relative;
+            left: 25px;
+        }
+    </style>
+
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+
+        <div class="navbar-header">
+            <a class="navbar-brand">
+                大魔王的小窝
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav" id="mytabs">
+                <li class="active"><a href="#">首页</a></li>
+                <li class=""><a href="#">和我联系</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a id="nav-login-btn">{{nav_login_btn_info}}</a>
+                </li>
+            </ul>
+            <form action="" class="navbar-form navbar-right">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search....">
+                </div>
+                <div class="btn btn-default">Submit</div>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container" style="width: 90%">
+    <div class="form-group">
+        <label>
+            <input type="text" class="form-control" id="title-input" placeholder="请输入文章标题..." style="width: 500px">
+        </label>
+    </div>
+    <div id="editor"></div>
+    <div class="row" id="publish-btn">
+        <button class="btn btn-default" @click="publishArticle()">发布文章</button>
+    </div>
+</div>
+
+<link rel="stylesheet" href="/editormd/css/editormd.css"/>
+<script src="/js/editormd.min.js"></script>
+<script type="text/javascript">
+    let editor;
+    $(function () {
+        editor = editormd("editor", {
+            width: "100%",
+            height: "540px",
+            // theme: "dark",
+            // previewTheme: "dark",
+            // editorTheme: "pastel-on-dark",
+            // markdown: md,
+            saveHTMLToTextarea: true,
+            path: "editormd/lib/",
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/upload/editormdImg"
+        });
+    });
+</script>
+
+<script>
+    new Vue({
+        el: "#publish-btn",
+        methods: {
+            publishArticle: function () {
+                let title = document.getElementById("title-input").value;
+                let content = editor.getHTML();
+                // alert(content);
+                $.ajax({
+                    url: '/article',
+                    type: 'POST',
+                    data: {
+                        title: title,
+                        content: content,
+                        authorName: "大魔王"
+                    },
+                    success: function (response_text) {
+                        alert('发布成功！');
+                        window.location = '/article/' + response_text;
+                    }
+                });
+            }
+        },
+    });
+
+    function isLogined() {
+        // TODO
+        return false;
+    }
+
+    new Vue({
+        el: "#nav-login-btn",
+        computed: {
+            nav_login_btn_info: function () {
+                return isLogined() ? "" : "登录";
+            }
+        }
+    });
+
+
+</script>
+
+</body>
+
+</html>
