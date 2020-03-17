@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dmwqaq.web.mapper.UserMapper">
+
+    <resultMap id="map" type="cn.dmwqaq.web.pojo.po.User">
+        <constructor>
+            <arg column="username" javaType="java.lang.String"/>
+            <arg column="hashed_password" javaType="java.lang.String"/>
+            <arg column="password_salt" javaType="java.lang.String"/>
+            <arg column="nickname" javaType="java.lang.String"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findByUsername" parameterType="java.lang.String" resultMap="map" useCache="true">
+        select username, hashed_password, password_salt, nickname
+        from dmwqaq_administrators
+        where username = #{id}
+    </select>
+
+    <insert id="createUser" parameterType="cn.dmwqaq.web.pojo.po.User">
+        insert into dmwqaq_administrators(username, hashed_password, password_salt, nickname)
+        values (#{username}, #{hashedPassword}, #{passwordSalt}, #{nickname})
+    </insert>
+
+</mapper>
