@@ -141,31 +141,33 @@ public class FileUploadController {
         }
         return file;
     }
+
+    private static class FileUploadResponse {
+
+        String errno;
+        String[] data;
+
+        public FileUploadResponse(String errno, String[] data) {
+            this.errno = errno;
+            this.data = data;
+        }
+
+        public String getErrno() {
+            return errno;
+        }
+
+        public void setErrno(String errno) {
+            this.errno = errno;
+        }
+
+        public String[] getData() {
+            return data;
+        }
+
+        public void setData(String[] data) {
+            this.data = data;
+        }
+    }
 }
 
-class FileUploadResponse {
 
-    String errno;
-    String[] data;
-
-    public FileUploadResponse(String errno, String[] data) {
-        this.errno = errno;
-        this.data = data;
-    }
-
-    public String getErrno() {
-        return errno;
-    }
-
-    public void setErrno(String errno) {
-        this.errno = errno;
-    }
-
-    public String[] getData() {
-        return data;
-    }
-
-    public void setData(String[] data) {
-        this.data = data;
-    }
-}
