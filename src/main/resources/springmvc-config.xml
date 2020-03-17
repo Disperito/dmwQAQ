@@ -66,8 +66,52 @@
         <property name="basePackage" value="cn.dmwqaq.web.mapper"/>
     </bean>
 
+
+    <!--    Shiro配置   -->
+    <bean id="userRealm" class="cn.dmwqaq.web.security.UserRealm">
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <property name="hashAlgorithmName" value="SHA-256"/>
+                <property name="hashIterations" value="1024"/>
+                <property name="storedCredentialsHexEncoded" value="false"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="userRealm"/>
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+    </bean>
+
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <property name="cipherKey"
+                  value="#{T(org.apache.shiro.codec.Base64)
+                            .decode('Ej6anCEkL4Shjra8v7272w==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="60"/>
+    </bean>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login.html"/>
+        <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /create_md.html = authc
+                /create_article.html = authc
+                /user/logout = logout
+                /test.html = user
+                /** = anon
+            </value>
+        </property>
+    </bean>
     <!--    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"-->
-    <!--          id="internalResourceViewResolver">-->
+    <!--          username="internalResourceViewResolver">-->
     <!--        <property name="prefix" value="/WEB-INF/html/"/>-->
     <!--        <property name="suffix" value=".html"/>-->
     <!--    </bean>-->
