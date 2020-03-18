@@ -9,6 +9,24 @@
 
     <context:property-placeholder location="classpath:properties/shiro.properties" ignore-unresolvable="true"/>
 
+    <bean id="hashService" class="org.apache.shiro.crypto.hash.DefaultHashService">
+        <property name="hashIterations" value="${shiro.hashIterations}"/>
+        <property name="hashAlgorithmName" value="${shiro.hashAlgorithmName}"/>
+        <property name="generatePublicSalt" value="false"/>
+    </bean>
+
+    <bean id="passwordService" class="cn.dmwqaq.web.security.DefaultSaltPasswordService">
+        <property name="hashFormat">
+            <bean class="org.apache.shiro.crypto.hash.format.Base64Format"/>
+        </property>
+        <property name="hashService" ref="hashService"/>
+        <!--        <property name=""-->
+    </bean>
+
+    <bean id="passwordMatcher" class="cn.dmwqaq.web.security.SaltedPasswordMatcher">
+        <property name="passwordService" ref="passwordService"/>
+    </bean>
+
     <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
         <property name="hashAlgorithmName" value="${shiro.hashAlgorithmName}"/>
         <property name="hashIterations" value="${shiro.hashIterations}"/>
@@ -16,7 +34,8 @@
     </bean>
 
     <bean id="realm" class="cn.dmwqaq.web.security.ShiroRealm">
-        <property name="credentialsMatcher" ref="credentialsMatcher"/>
+        <property name="credentialsMatcher" ref="passwordMatcher"/>
+<!--        <property name="credentialsMatcher" ref="credentialsMatcher"/>-->
     </bean>
 
     <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
