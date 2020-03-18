@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 @Component
-public class UserRealm extends AuthorizingRealm {
-
+public class ShiroRealm extends AuthorizingRealm {
 
     @Override
     public String getName() {
@@ -38,17 +37,11 @@ public class UserRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
             throws AuthenticationException {
         String username = (String) authenticationToken.getPrincipal();
-//        String password = String.valueOf((char[]) authenticationToken.getCredentials());
         User user;
 
         if ((user = userService.findByUsername(username)) == null) {
             throw new UnknownAccountException();
         }
-
-//        String hashedPassword = new Sha256Hash(password, user.getPasswordSalt(), 1024).toBase64();
-//        if (!user.getHashedPassword().equals(hashedPassword)) {
-//            throw new IncorrectCredentialsException();
-//        }
 
         return new SimpleAuthenticationInfo(user.getUsername(),
                                             user.getHashedPassword(),
