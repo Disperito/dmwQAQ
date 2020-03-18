@@ -4,6 +4,7 @@ import cn.dmwqaq.web.pojo.po.User;
 import cn.dmwqaq.web.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -45,7 +46,7 @@ public class ShiroRealm extends AuthorizingRealm {
 
         return new SimpleAuthenticationInfo(user.getUsername(),
                                             user.getHashedPassword(),
-                                            ByteSource.Util.bytes(user.getPasswordSalt()),
+                                            ByteSource.Util.bytes(Base64.decode(user.getPasswordSalt())),
                                             this.getName());
 
     }
