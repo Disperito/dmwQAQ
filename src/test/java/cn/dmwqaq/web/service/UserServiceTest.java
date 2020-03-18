@@ -11,8 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public class UserServiceTest extends BaseUnitTest {
 
-    final String username = "t1";
-    final String password = "a";
+    final String username = "";
+    final String password = "";
+    final String nickname = "";
 
     @Autowired
     private UserService userService;
@@ -30,6 +31,6 @@ public class UserServiceTest extends BaseUnitTest {
 
     @Test
     public void createUser() {
-        userService.createUser(username, password, "damowang");
+        userService.createUser(username, password, nickname);
     }
 }

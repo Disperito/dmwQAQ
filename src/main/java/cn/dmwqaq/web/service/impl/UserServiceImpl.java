@@ -2,12 +2,13 @@ package cn.dmwqaq.web.service.impl;
 
 import cn.dmwqaq.web.mapper.UserMapper;
 import cn.dmwqaq.web.pojo.po.User;
+import cn.dmwqaq.web.security.SaltPasswordService;
 import cn.dmwqaq.web.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
-import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,10 @@ public class UserServiceImpl implements UserService {
 
     private static Logger logger = LogManager.getLogger(UserServiceImpl.class);
 
-    private static RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
+    private final static RandomNumberGenerator randomNumberGenerator = new SecureRandomNumberGenerator();
+
+    @Resource
+    private SaltPasswordService passwordService;
 
     @Resource
     private UserMapper userMapper;
@@ -35,10 +39,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean createUser(String username, String password, String nickname) {
-        String salt = randomNumberGenerator.nextBytes().toBase64();
-        String hashedPassword = new Sha256Hash(password, salt, 1024).toBase64();
+        ByteSource salt = getSalt();
 
-        User user = new User(username, hashedPassword, salt, nickname);
+        String hashedPassword = passwordService.encryptPassword(password, salt);
+
+        User user = new User(username, hashedPassword, salt.toBase64(), nickname);
+
         try {
             if (userMapper.createUser(user) > 0) {
                 return true;
@@ -47,5 +53,9 @@ public class UserServiceImpl implements UserService {
             logger.error(e.getMessage(), e);
         }
         return false;
+    }
+
+    private ByteSource getSalt() {
+        return randomNumberGenerator.nextBytes();
     }
 }
