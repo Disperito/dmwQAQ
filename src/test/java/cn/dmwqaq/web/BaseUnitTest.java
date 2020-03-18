@@ -5,7 +5,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath*:springmvc-config.xml"})
+@ContextConfiguration({"classpath*:spring-config.xml",
+                       "classpath*:spring-shiro.xml",
+                       "classpath*:spring-mybatis.xml"})
 public class BaseUnitTest {
 
 }
